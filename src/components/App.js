@@ -178,11 +178,11 @@ export default class App extends React.Component {
 
             <ImageBackground
               style={{
-                flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }} 
+                flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20, justifyContent: 'center' }} 
               imageStyle={{ borderRadius: 20 }}
               source={item.uri}
             >
-                <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black' }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'black', height: 60 }}>
                   <Text style={{ fontSize: 40, color: 'white' }}>{Users[Users.length - 1].name}</Text>
                 </View>
               </ImageBackground>
