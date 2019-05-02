@@ -17,8 +17,9 @@
 import React from 'react';
 import { Text, View, Dimensions, Image, Animated, PanResponder, ImageBackground } from 'react-native';
 
-const SERVER_IP = '10.200.203.231';
+const SERVER_IP = '10.100.102.2';
 const PORT_NUM = '5005';
+
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Users = [
