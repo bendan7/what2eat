@@ -1,3 +1,4 @@
+/* eslint-disable import/newline-after-import */
 /* eslint-disable no-undef */
 /* eslint-disable no-else-return */
 /* eslint-disable arrow-body-style */
@@ -23,16 +24,15 @@ const PORT_NUM = '5005';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Users = [
-  { id: '1', name: 'tometo', uri: require('../tometo.jpg') },
-  { id: '2', name: 'pasta', uri: require('../pasta.jpg') },
-  { id: '3', name: 'Olive-Oil', uri: require('../Olive-Oil.jpg') },
+ 
 ];
 
 export default class App extends React.Component {
   constructor() {
     super();
-
+    
     this.position = new Animated.ValueXY();
+
     this.state = {
       currentIndex: 0,
     };
@@ -72,10 +72,10 @@ export default class App extends React.Component {
       outputRange: [1, 0.8, 1],
       extrapolate: 'clamp',
     });
+    this.getNextAttToAsk();
   }
 
   componentWillMount() {
-    this.getNextAttToAsk();
     this.PanResponder = PanResponder.create({
 
       // eslint-disable-next-line no-unused-vars
@@ -124,11 +124,13 @@ export default class App extends React.Component {
       })
       .then((response) => response.json())
       .then((responseJson) => {
-         console.log(responseJson);
-         this.setState({
-            nextAtt: responseJson.nextAtt,
-            numOfRelevantDishes: responseJson.numOfRelevantDishes
-         });
+        // push the next att that need to be ask into att
+        Users.push({ id: Users.length, name: responseJson.nextAtt, uri: require('../tometo.jpg') });
+        this.setState({
+          numOfRelevantDishes: responseJson.numOfRelevantDishes
+        });
+         
+         console.log(Users)
       })
       .catch((error) => {
          console.error(error);
@@ -136,7 +138,6 @@ export default class App extends React.Component {
   }
 
   async sendYesOrNo(ans) {
-      console.log(ans);
       await fetch(`http://${SERVER_IP}:${PORT_NUM}/send-yes-or-no`, {
       method: 'POST',
       headers: {
@@ -182,7 +183,7 @@ export default class App extends React.Component {
               source={item.uri}
             >
                 <View style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black' }}>
-                  <Text style={{ fontSize: 40, color: 'white' }}>{this.state.nextAtt}</Text>
+                  <Text style={{ fontSize: 40, color: 'white' }}>{Users[Users.length - 1].name}</Text>
                 </View>
               </ImageBackground>
           </Animated.View>
