@@ -129,8 +129,6 @@ export default class App extends React.Component {
         this.setState({
           numOfRelevantDishes: responseJson.numOfRelevantDishes
         });
-         
-         console.log(Users)
       })
       .catch((error) => {
          console.error(error);
@@ -147,9 +145,19 @@ export default class App extends React.Component {
       body: JSON.stringify({
       res: `${ans}`,
       }),
-      });
-
-    this.getNextAttToAsk();
+      }).then((response) => response.json())
+      .then((responseJson) => {
+        if (responseJson.AreWeFinsih === 1) {
+          Users.push({ id: Users.length, name: 'we done!!!!', uri: require('../tometo.jpg') });
+          this.setState({ numOfRelevantDishes: responseJson.numOfRelevantDishes });
+        }
+        else {
+        this.getNextAttToAsk();
+        }
+      })
+      .catch((error) => {
+         console.error(error);
+      });   
   }
   
   renderUsers = () => {
@@ -183,7 +191,7 @@ export default class App extends React.Component {
               source={item.uri}
             >
                 <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'black', height: 60 }}>
-                  <Text style={{ fontSize: 40, color: 'white' }}>{Users[Users.length - 1].name}</Text>
+                  <Text style={{ fontSize: 40, color: 'white' }}>{Users[Users.length - 1].name + ' ' + this.state.numOfRelevantDishes}</Text>
                 </View>
               </ImageBackground>
           </Animated.View>
