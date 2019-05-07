@@ -17,8 +17,10 @@
 
 import React from 'react';
 import { Text, View, Dimensions, Image, Animated, PanResponder, ImageBackground } from 'react-native';
+import { createStackNavigator, createAppContainer } from 'react-navigation'
+import ScrollviewComp from '../screens/ScrollviewComp';
 
-const SERVER_IP = '10.100.102.2';
+const SERVER_IP = '10.200.201.57';
 const PORT_NUM = '5005';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -27,7 +29,7 @@ const Users = [
  
 ];
 
-export default class App extends React.Component {
+class App extends React.Component {
   constructor() {
     super();
     
@@ -150,8 +152,8 @@ export default class App extends React.Component {
         if (responseJson.AreWeFinsih === 1) {
           Users.push({ id: Users.length, name: 'we done!!!!', uri: require('../tometo.jpg') });
           this.setState({ numOfRelevantDishes: responseJson.numOfRelevantDishes });
-        }
-        else {
+          this.props.navigation.navigate('ScrollviewRecipes')
+        } else {
         this.getNextAttToAsk();
         }
       })
@@ -191,7 +193,7 @@ export default class App extends React.Component {
               source={item.uri}
             >
                 <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'black', height: 60 }}>
-                  <Text style={{ fontSize: 40, color: 'white' }}>{Users[Users.length - 1].name + ' ' + this.state.numOfRelevantDishes}</Text>
+                  <Text style={{ fontSize: 40, color: 'white' }}>{ Users[Users.length - 1].name + ' ' + this.state.numOfRelevantDishes }</Text>
                 </View>
               </ImageBackground>
           </Animated.View>
@@ -246,3 +248,20 @@ export default class App extends React.Component {
     );
   }
 }
+
+const AppNavigator = createStackNavigator({
+  Explore: {
+    screen: App,
+    navigationOptions: {
+   header: null
+  }
+  },
+  ScrollviewRecipes:{
+    screen: ScrollviewComp,
+      navigationOptions: {
+   header: null
+  }
+  }
+});
+
+export default createAppContainer(AppNavigator);
