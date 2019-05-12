@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable arrow-body-style */
 /* eslint-disable global-require */
@@ -15,48 +16,65 @@
 
 import React, { Component } from 'react';
 import {
-  StyleSheet, Text, View, ScrollView, Image, Button
+  StyleSheet, Text, View, ScrollView, Image, Button, Linking
 } from 'react-native';
 
-
+const SERVER_IP = '172.20.10.5';
+const PORT_NUM = '5005';
 type Props = {};
-const data = [{
+let data = [{
 
   id: 1234,
-  title: 'Best Vegan Burger - Best Vegan Burger',
-  shortdesc: 'Short description of the dish-bla bla bla bla bla bla bla bla bla',
-  preptime: '30 min',
-  level: 'Easy',
-  img: require('./food.jpg')
+  title: 'loading...',
+  shortdesc: 'loading...',
+  preptime: 'loading...',
+  level: 'loading...',
+  imageurl: require('./food.jpg')
 },
-{
-  id: 1235,
-  title: 'Best Vegan Burger - Best Vegan Burger',
-  shortdesc: 'Short description of the dish-bla bla bla bla bla bla bla bla bla',
-  preptime: '30 min',
-  level: 'Easy',
-  img: require('./food.jpg')
-}];
+];
 
 export default class ScrollviewComp extends Component<Props> {
-  renderRecipes = () => data.map((item) => {
+  constructor(){
+    super();
+  }
+
+
+  componentWillMount() {
+    console.log('!!!!!!!!!!!!!!!!!');
+      fetch(`http://${SERVER_IP}:${PORT_NUM}/get-preview-info`, {
+         method: 'GET'
+      })
+      .then((response) => response.json())
+      .then((responseJson) => {
+        data = responseJson.recPreviewInfo;
+        console.log(data);
+        this.forceUpdate();
+      })
+      .catch((error) => {
+         console.error(error);
+      });
+  }
+
+
+  renderRecipes() {
+    return data.map((item) => {
     return (
       <View style={styles.container} key={item.id}>
-        <Image style={styles.img} source={item.img} />
-        <Text style={{ padding: 10, fontSize: 32, fontWeight: 'bold' }}>{item.title}</Text>
-        <Text style={{ paddingHorizontal: 10, fontSize: 20, fontStyle: 'italic' }}>{item.shortdesc}</Text>
-        <View style={{ padding: 20, fontSize: 30 }}>
-          <Text style={styles.txt}>Preparation time: {item.preptime}</Text>
-          <Text style={styles.txt}>Difficulty: {item.level}</Text>
-          <Button title="See Recipe" color="#505160" accessibilityLabel="Learn more about this purple button" />
-        </View>
+        <Image
+         style={styles.img}
+         source={{ uri: String(item.imageurl) }}
+        />
+        <Text style={{ padding: 5, fontSize: 24, fontWeight: 'bold' }}>{item.title}</Text>
+        <Text style={{ paddingHorizontal: 10, paddingBottom: 50, fontSize: 20, fontStyle: 'italic' }}>{String(item.desc).substr(0, 100)}</Text>
+        <Button style={{ height: 250, }} title="Full Recipe" color="#505160" onPress={() => { Linking.openURL('https://google.com'); }} />
       </View>
     );
-  })
+  });
+  }
 
   render() {
     return (
-      <ScrollView horizontal={true} >
+      <ScrollView horizontal={true}>
         {this.renderRecipes()}
       </ScrollView>
     );
@@ -73,10 +91,9 @@ const styles = StyleSheet.create({
   },
   img: {
     width: 350,
+    height: 350,
     borderTopLeftRadius: 50,
     borderTopRightRadius: 50,
   },
-  txt: {
-    fontSize: 18
-  }
+
 });

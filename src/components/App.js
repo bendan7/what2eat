@@ -1,3 +1,4 @@
+/* eslint-disable prefer-template */
 /* eslint-disable import/newline-after-import */
 /* eslint-disable no-undef */
 /* eslint-disable no-else-return */
@@ -17,10 +18,10 @@
 
 import React from 'react';
 import { Text, View, Dimensions, Image, Animated, PanResponder, ImageBackground } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation'
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 import ScrollviewComp from '../screens/ScrollviewComp';
 
-const SERVER_IP = '10.200.201.57';
+const SERVER_IP = '172.20.10.5';
 const PORT_NUM = '5005';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
@@ -127,7 +128,7 @@ class App extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         // push the next att that need to be ask into att
-        Users.push({ id: Users.length, name: responseJson.nextAtt, uri: require('../tometo.jpg') });
+        Users.push({ id: Users.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
         this.setState({
           numOfRelevantDishes: responseJson.numOfRelevantDishes
         });
@@ -150,9 +151,8 @@ class App extends React.Component {
       }).then((response) => response.json())
       .then((responseJson) => {
         if (responseJson.AreWeFinsih === 1) {
-          Users.push({ id: Users.length, name: 'we done!!!!', uri: require('../tometo.jpg') });
           this.setState({ numOfRelevantDishes: responseJson.numOfRelevantDishes });
-          this.props.navigation.navigate('ScrollviewRecipes')
+          this.props.navigation.navigate('ScrollviewRecipes');
         } else {
         this.getNextAttToAsk();
         }
@@ -172,7 +172,7 @@ class App extends React.Component {
             {...this.PanResponder.panHandlers}
             key={item.id}
             style={[this.rotateAndTranslate, {
-              height: SCREEN_HEIGHT - 120, width: SCREEN_WIDTH, padding: 10, position: 'absolute' }]}
+              height: SCREEN_HEIGHT - 20, width: SCREEN_WIDTH, padding: 10, position: 'absolute' }]}
           >
             <Animated.View style={{
               opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}
@@ -205,7 +205,7 @@ class App extends React.Component {
             style={[{
               opacity: this.nextCardOpacity,
               transform: [{ scale: this.nextCardScale }],
-              height: SCREEN_HEIGHT - 120,
+              height: SCREEN_HEIGHT - 20,
               width: SCREEN_WIDTH,
               padding: 10,
               position: 'absolute'
@@ -222,7 +222,7 @@ class App extends React.Component {
             </Animated.View>
 
             <Image
-              style={{ flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20 }}
+              style={{ flex: 1, height: SCREEN_HEIGHT, width: SCREEN_WIDTH, resizeMode: 'cover', borderRadius: 20 }}
               source={item.uri}
             />
 
@@ -234,17 +234,9 @@ class App extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
-        <View style={{ height: 60 }}>
-          <Text>HEADER</Text>
-        </View>
         <View style={{ flex: 1 }}>
           {this.renderUsers()}
         </View>
-        <View style={{ height: 60 }}>
-          <Text>FOTTER</Text>
-        </View>
-      </View>
     );
   }
 }
@@ -256,7 +248,7 @@ const AppNavigator = createStackNavigator({
    header: null
   }
   },
-  ScrollviewRecipes:{
+  ScrollviewRecipes: {
     screen: ScrollviewComp,
       navigationOptions: {
    header: null
