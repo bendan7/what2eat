@@ -31,7 +31,7 @@ let data = [{
   shortdesc: 'loading...',
   preptime: 'loading...',
   level: 'loading...',
-  imageurl: require('./food.jpg')
+  imageurl: 'loading...'
 },
 ];
 

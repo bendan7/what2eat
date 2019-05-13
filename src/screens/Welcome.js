@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
 /* eslint-disable global-require */
 /* eslint-disable react/jsx-one-expression-per-line */
@@ -13,9 +14,9 @@
  */
 
 import React, { Component } from 'react';
-import { Text, View, Button, StyleSheet } from 'react-native';
-import { createStackNavigator, createAppContainer } from 'react-navigation'
-
+import { Text, View, Button, StyleSheet, Image } from 'react-native';
+import { createBottomTabNavigator, createAppContainer, } from 'react-navigation';
+import Explore from './Explore.js';
 
 const styles = StyleSheet.create({
   container: {
@@ -23,14 +24,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#F5FCFF',
+    paddingHorizontal: 15,
   },
   welcome: {
-    fontSize: 20,
+    fontSize: 28,
     textAlign: 'center',
     margin: 10,
   },
   instructions: {
     textAlign: 'center',
+    fontSize: 20,
     color: '#333333',
     marginBottom: 5,
   },
@@ -41,27 +44,42 @@ class Welcome extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to What2Eat!</Text>
-        <Text style={styles.instructions}>The first Recipes search app that will help you find what 
-        to eat base on what you have in the fridge
-        </Text>
-        <Button title="See Recipe" color="#505160" onPress={() => this.props.navigation.navigate('Page1')}  />
+        <Text style={styles.welcome}>Welcome to What2Eat App</Text>
+        <Text style={styles.instructions}>"Recipes Search" app based on what you have in the fridge</Text>
+        <Image
+         style={{ width: 150, height: 150 }}
+         source={require('../asset/swipe-helper.gif')}
+        />
+        <View style={{ padding: 20 }}>
+          
+          <Text style={{ textAlign: 'center' }}>instructions:</Text>
+          <Text style={styles.instructions}>Swip Right -> I have</Text>
+          <Text style={styles.instructions}>Swip Left {'<-'} I don't have</Text>
+        </View>
+        <Button
+          onPress={console.log('press')}
+          title="Learn More"
+          color="#841584"
+          style={{ padding: 20 }}
+          accessibilityLabel="Learn more about this purple button"
+        />
       </View>
+
     );
   }
 }
 
-const AppNavigator = createStackNavigator({
+const AppNavigator = createBottomTabNavigator({
   Welcome: {
     screen: Welcome,
     navigationOptions: {
    header: null
   }
   },
-  Page1: {
-    screen: Page1,
+  Explore: {
+    screen: Explore,
       navigationOptions: {
-   header: null
+      header: null
   }
   }
 });
