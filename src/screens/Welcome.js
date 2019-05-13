@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
 /* eslint-disable global-require */
@@ -14,8 +15,9 @@
  */
 
 import React, { Component } from 'react';
-import { Text, View, Button, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image } from 'react-native';
 import { createBottomTabNavigator, createAppContainer, } from 'react-navigation';
+import Button from 'react-native-button';
 import Explore from './Explore.js';
 
 const styles = StyleSheet.create({
@@ -41,10 +43,15 @@ const styles = StyleSheet.create({
 type Props = {};
 
 class Welcome extends Component<Props> {
+
+  _handlePress() {
+    console.log('Pressed!');
+  }
+
   render() {
     return (
       <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to What2Eat App</Text>
+        <Text style={styles.welcome}>Welcome to What2Eat</Text>
         <Text style={styles.instructions}>"Recipes Search" app based on what you have in the fridge</Text>
         <Image
          style={{ width: 150, height: 150 }}
@@ -57,12 +64,12 @@ class Welcome extends Component<Props> {
           <Text style={styles.instructions}>Swip Left {'<-'} I don't have</Text>
         </View>
         <Button
-          onPress={console.log('press')}
-          title="Learn More"
-          color="#841584"
-          style={{ padding: 20 }}
-          accessibilityLabel="Learn more about this purple button"
-        />
+          style={{ fontSize: 26, color: 'white' }}
+          containerStyle={{ padding: 10, height: 70, overflow: 'hidden', borderRadius: 8, backgroundColor: '#1E90FF', justifyContent: 'center', alignItems: 'center', }}
+          onPress={() => this._handlePress()} 
+        >
+          Let's start !
+        </Button>
       </View>
 
     );
