@@ -15,7 +15,7 @@
 import React, { Component } from 'react';
 import { Text, View, Button, StyleSheet } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation'
-import Page1 from './page1';
+
 
 const styles = StyleSheet.create({
   container: {
@@ -58,7 +58,7 @@ const AppNavigator = createStackNavigator({
    header: null
   }
   },
-  Page1:{
+  Page1: {
     screen: Page1,
       navigationOptions: {
    header: null

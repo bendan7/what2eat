@@ -1,3 +1,5 @@
+/* eslint-disable prefer-template */
+/* eslint-disable no-undef */
 /* eslint-disable max-len */
 /* eslint-disable import/no-unresolved */
 /* eslint-disable arrow-body-style */
@@ -19,7 +21,7 @@ import {
   StyleSheet, Text, View, ScrollView, Image, Button, Linking
 } from 'react-native';
 
-const SERVER_IP = '172.20.10.5';
+const SERVER_IP = '10.100.102.2';
 const PORT_NUM = '5005';
 type Props = {};
 let data = [{
@@ -34,9 +36,6 @@ let data = [{
 ];
 
 export default class ScrollviewComp extends Component<Props> {
-  constructor(){
-    super();
-  }
 
 
   componentWillMount() {
@@ -51,7 +50,7 @@ export default class ScrollviewComp extends Component<Props> {
         this.forceUpdate();
       })
       .catch((error) => {
-         console.error(error);
+         console.error(error.message + ' ----error:get-preview-info');
       });
   }
 
