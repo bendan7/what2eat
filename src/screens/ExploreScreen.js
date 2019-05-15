@@ -20,20 +20,20 @@
 import React from 'react';
 import { Text, View, Dimensions, Image, Animated, PanResponder, ImageBackground } from 'react-native';
 import { createStackNavigator, createAppContainer, NavigationEvents } from 'react-navigation';
-import ScrollviewComp from '../screens/ScrollviewComp';
+import ScrollviewComp from './ScrollviewComp';
 
-const SERVER_IP = '10.100.102.2';
+
+const SERVER_IP = '10.200.202.228';
 const PORT_NUM = '5005';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
-const Users = [];
+// const Users = [];
 const Att = [];
 
-class App extends React.Component {
+class ExploreScreen extends React.Component {
   constructor() {
     super();
-    
     this.position = new Animated.ValueXY();
 
     this.state = {
@@ -124,8 +124,9 @@ class App extends React.Component {
       .then((response) => response.json())
       .then((responseJson) => {
         // push the next att that need to be ask into att
-        Users.push({ id: Users.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
-        Att.push({ id: Users.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
+        //Users.push({ id: Users.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
+        Att.push({ id: Att.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
+        
         this.setState({
           numOfRelevantDishes: responseJson.numOfRelevantDishes
         });
@@ -158,7 +159,6 @@ class App extends React.Component {
          console.error(error.message + ' ---error:sendYesOrNo');
       });   
   }
-
 
   // backup function: "renderAtt" replace it
   renderUsers = () => {
@@ -290,7 +290,7 @@ class App extends React.Component {
 
 const AppNavigator = createStackNavigator({
   Explore: {
-    screen: App,
+    screen: ExploreScreen,
     navigationOptions: {
    header: null
   }

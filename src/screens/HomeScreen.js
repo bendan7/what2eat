@@ -16,9 +16,9 @@
 
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Image } from 'react-native';
-import { createBottomTabNavigator, createAppContainer, } from 'react-navigation';
+import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
 import Button from 'react-native-button';
-import Explore from './Explore.js';
+import ExploreScreen from './ExploreScreen.js';
 
 const styles = StyleSheet.create({
   container: {
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 });
 type Props = {};
 
-class Welcome extends Component<Props> {
+class HomeScreen extends Component<Props> {
 
   _handlePress() {
     console.log('Pressed!');
@@ -77,18 +77,19 @@ class Welcome extends Component<Props> {
 }
 
 const AppNavigator = createBottomTabNavigator({
-  Welcome: {
-    screen: Welcome,
+  Home: {
+    screen: HomeScreen,
     navigationOptions: {
    header: null
   }
   },
   Explore: {
-    screen: Explore,
+    screen: ExploreScreen,
       navigationOptions: {
       header: null
   }
   }
 });
+
 
 export default createAppContainer(AppNavigator);
