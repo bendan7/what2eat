@@ -21,7 +21,7 @@ import {
   StyleSheet, Text, View, ScrollView, Image, Button, Linking
 } from 'react-native';
 
-const SERVER_IP = '10.200.202.228';
+const SERVER_IP = '10.100.102.2';
 const PORT_NUM = '5005';
 type Props = {};
 let data = [{

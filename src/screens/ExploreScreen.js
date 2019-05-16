@@ -18,17 +18,17 @@
 
 
 import React from 'react';
-import { Text, View, Dimensions, Image, Animated, PanResponder, ImageBackground } from 'react-native';
+import { Text, View, Dimensions, Animated, PanResponder, ImageBackground } from 'react-native';
 import { createStackNavigator, createAppContainer, NavigationEvents } from 'react-navigation';
+
 import ScrollviewComp from './ScrollviewComp';
 
 
-const SERVER_IP = '10.200.202.228';
+const SERVER_IP = '10.100.102.2';
 const PORT_NUM = '5005';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
-// const Users = [];
 const Att = [];
 
 class ExploreScreen extends React.Component {
@@ -160,117 +160,45 @@ class ExploreScreen extends React.Component {
       });   
   }
 
-  // backup function: "renderAtt" replace it
-  renderUsers = () => {
-    return Users.map((item, i) => {
-      if (i < this.state.currentIndex) {
-        return null;
-      } else if (i === this.state.currentIndex) {
-        return (
-          <Animated.View
-            {...this.PanResponder.panHandlers}
-            key={item.id}
-            style={[this.rotateAndTranslate, {
-              height: SCREEN_HEIGHT - 20, width: SCREEN_WIDTH, padding: 10, position: 'absolute' }]}
-          >
-            <Animated.View style={{
-              opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}
-            >
-              <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>LIKE</Text>
-            </Animated.View>
-
-            <Animated.View style={{
-              opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}
-            >
-              <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
-            </Animated.View>
-
-            <ImageBackground
-              style={{
-                flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20, justifyContent: 'center' }} 
-              imageStyle={{ borderRadius: 20 }}
-              source={item.uri}
-            >
-                <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'black', height: 60 }}>
-                  <Text style={{ fontSize: 40, color: 'white' }}>{ Users[Users.length - 1].name + ' ' + this.state.numOfRelevantDishes }</Text>
-                </View>
-              </ImageBackground>
-          </Animated.View>
-        );
-      } else {
-        return (
-          <Animated.View
-            key={item.id}
-            style={[{
-              opacity: this.nextCardOpacity,
-              transform: [{ scale: this.nextCardScale }],
-              height: SCREEN_HEIGHT - 20,
-              width: SCREEN_WIDTH,
-              padding: 10,
-              position: 'absolute'
-            }]}
-          >
-            <Animated.View style={{ opacity: 0, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}>
-              <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>LIKE</Text>
-
-            </Animated.View>
-
-            <Animated.View style={{ opacity: 0, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}>
-              <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
-
-            </Animated.View>
-
-            <Image
-              style={{ flex: 1, height: SCREEN_HEIGHT, width: SCREEN_WIDTH, resizeMode: 'cover', borderRadius: 20 }}
-              source={item.uri}
-            />
-
-          </Animated.View>
-        );
-      }
-    }).reverse();
-  };
-
-  
-  renderAtt = () => {
+  renderAtt() {
     return Att.map((item, i) => {
       if (i !== this.state.currentIndex) {
         return null;
       } else if (i === this.state.currentIndex) {
-        return (
-          <Animated.View
-            {...this.PanResponder.panHandlers}
-            key={item.id}
-            style={[this.rotateAndTranslate, {
-              height: SCREEN_HEIGHT - 20, width: SCREEN_WIDTH, padding: 10, position: 'absolute' }]}
-          >
-            <Animated.View style={{
-              opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}
+          return (
+            <Animated.View
+              {...this.PanResponder.panHandlers}
+              key={item.id}
+              style={[this.rotateAndTranslate, {
+                height: SCREEN_HEIGHT - 20, width: SCREEN_WIDTH, padding: 10, position: 'absolute' }]}
             >
-              <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>LIKE</Text>
-            </Animated.View>
+              <Animated.View style={{
+                opacity: this.likeOpacity, transform: [{ rotate: '-30deg' }], position: 'absolute', top: 50, left: 40, zIndex: 1000 }}
+              >
+                <Text style={{ borderWidth: 1, borderColor: 'green', color: 'green', fontSize: 32, fontWeight: '800', padding: 10 }}>LIKE</Text>
+              </Animated.View>
 
-            <Animated.View style={{
-              opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}
-            >
-              <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
-            </Animated.View>
+              <Animated.View style={{
+                opacity: this.dislikeOpacity, transform: [{ rotate: '30deg' }], position: 'absolute', top: 50, right: 40, zIndex: 1000 }}
+              >
+                <Text style={{ borderWidth: 1, borderColor: 'red', color: 'red', fontSize: 32, fontWeight: '800', padding: 10 }}>NOPE</Text>
+              </Animated.View>
 
-            <ImageBackground
-              style={{
-                flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20, justifyContent: 'center' }} 
-              imageStyle={{ borderRadius: 20 }}
-              source={item.uri}
-            >
-                <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'black', height: 60 }}>
-                  <Text style={{ fontSize: 40, color: 'white' }}>{ Att[Att.length - 1].name + ' ' + this.state.numOfRelevantDishes }</Text>
-                </View>
-              </ImageBackground>
-          </Animated.View>
-        );
+              <ImageBackground
+                style={{
+                  flex: 1, height: null, width: null, resizeMode: 'cover', borderRadius: 20, justifyContent: 'center' }} 
+                imageStyle={{ borderRadius: 20 }}
+                source={item.uri}
+              >
+                  <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'black', height: 60 }}>
+                    <Text style={{ fontSize: 40, color: 'white' }}>{ Att[Att.length - 1].name + ' ' + this.state.numOfRelevantDishes }</Text>
+                  </View>
+                </ImageBackground>
+            </Animated.View>
+          );
+        }
       }
-    }
-  );
+    );
   }
       
   render() {

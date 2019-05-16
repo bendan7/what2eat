@@ -15,11 +15,12 @@
  */
 
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, View, StyleSheet, Image, Dimensions } from 'react-native';
 import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
 import Button from 'react-native-button';
 import ExploreScreen from './ExploreScreen.js';
 
+const SCREEN_WIDTH = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -40,6 +41,7 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
 });
+
 type Props = {};
 
 class HomeScreen extends Component<Props> {
@@ -65,7 +67,7 @@ class HomeScreen extends Component<Props> {
         </View>
         <Button
           style={{ fontSize: 26, color: 'white' }}
-          containerStyle={{ padding: 10, height: 70, overflow: 'hidden', borderRadius: 8, backgroundColor: '#1E90FF', justifyContent: 'center', alignItems: 'center', }}
+          containerStyle={{ padding: 10, height: 70, width: SCREEN_WIDTH - 40, overflow: 'hidden', borderRadius: 8, backgroundColor: '#1E90FF', justifyContent: 'center', alignItems: 'center', }}
           onPress={() => this._handlePress()} 
         >
           Let's start !
