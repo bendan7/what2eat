@@ -46,15 +46,11 @@ type Props = {};
 
 class HomeScreen extends Component<Props> {
 
-  _handlePress() {
-    console.log('Pressed!');
-  }
-
   render() {
     return (
       <View style={styles.container}>
         <Text style={styles.welcome}>Welcome to What2Eat</Text>
-        <Text style={styles.instructions}>"Recipes Search" app based on what you have in the fridge</Text>
+        <Text style={styles.instructions}>"Recipes Search" app based on what you have at home</Text>
         <Image
          style={{ width: 150, height: 150 }}
          source={require('../asset/swipe-helper.gif')}
@@ -68,7 +64,7 @@ class HomeScreen extends Component<Props> {
         <Button
           style={{ fontSize: 26, color: 'white' }}
           containerStyle={{ padding: 10, height: 70, width: SCREEN_WIDTH - 40, overflow: 'hidden', borderRadius: 8, backgroundColor: '#1E90FF', justifyContent: 'center', alignItems: 'center', }}
-          onPress={() => this.props.navigation.navigate('ExploreScreen') } 
+          onPress={() => this.props.navigation.navigate('ExploreScreen')} 
         >
           Let's start !
         </Button>

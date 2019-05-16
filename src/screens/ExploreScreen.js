@@ -30,8 +30,10 @@ const PORT_NUM = '5005';
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Att = [];
+let TotalNumOfRecipes = 0;
 
 class ExploreScreen extends React.Component {
+
   constructor() {
     super();
     this.position = new Animated.ValueXY();
@@ -88,7 +90,6 @@ class ExploreScreen extends React.Component {
       },
       onPanResponderRelease: (evt, gestureState) => {
         if (gestureState.dx > 120) { // LIKE CASE
-          console.log('LIKEEEEEEE');
           this.sendYesOrNo(1);
           Animated.spring(this.position, {
             toValue: { x: SCREEN_WIDTH + 100, y: gestureState.dy }
@@ -98,7 +99,6 @@ class ExploreScreen extends React.Component {
             });
           }); // DISLIKE CASE
         } else if (gestureState.dx < -120) {
-          console.log('DISSSSSLIKE');
           this.sendYesOrNo(0);
           Animated.spring(this.position, {
             toValue: { x: -SCREEN_WIDTH - 100, y: gestureState.dy }
@@ -118,22 +118,26 @@ class ExploreScreen extends React.Component {
   }
 
   async getNextAttToAsk() {
-      await fetch(`http://${SERVER_IP}:${PORT_NUM}/get-next-att`, {
-         method: 'GET'
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        // push the next att that need to be ask into att
-        //Users.push({ id: Users.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
-        Att.push({ id: Att.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
-        
-        this.setState({
-          numOfRelevantDishes: responseJson.numOfRelevantDishes
-        });
-      })
-      .catch((error) => {
-         console.error(error.message + ' ----error:getNextAttToAsk');
+    await fetch(`http://${SERVER_IP}:${PORT_NUM}/get-next-att`, {
+        method: 'GET'
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // push the next att that need to be ask into att
+      //Users.push({ id: Users.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
+      Att.push({ id: Att.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
+      
+      // in the first request this section save the total number of recipes
+      if (Att.length === 1) {
+            TotalNumOfRecipes = responseJson.numOfRelevantDishes;
+      }
+      this.setState({
+        numOfRelevantDishes: responseJson.numOfRelevantDishes
       });
+    })
+    .catch((error) => {
+        console.error(error.message + ' ----error:getNextAttToAsk');
+    });
   }
 
   async sendYesOrNo(ans) {
@@ -150,7 +154,7 @@ class ExploreScreen extends React.Component {
       .then((responseJson) => {
         if (responseJson.AreWeFinsih === 1) {
           this.setState({ numOfRelevantDishes: responseJson.numOfRelevantDishes });
-          this.props.navigation.navigate('ScrollviewRecipes');
+          this.props.navigation.navigate('History');
         } else {
         this.getNextAttToAsk();
         }
@@ -190,8 +194,9 @@ class ExploreScreen extends React.Component {
                 imageStyle={{ borderRadius: 20 }}
                 source={item.uri}
               >
-                  <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'black', height: 60 }}>
-                    <Text style={{ fontSize: 40, color: 'white' }}>{ Att[Att.length - 1].name + ' ' + this.state.numOfRelevantDishes }</Text>
+                  <View style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: 'white', height: null, width: null }}>
+                    <Text style={{ fontSize: 30, color: 'black' }}>{ Att[Att.length - 1].name }</Text>
+                    <Text style={{ fontSize: 20, color: 'black' }}>{TotalNumOfRecipes + '/' + this.state.numOfRelevantDishes }</Text>
                   </View>
                 </ImageBackground>
             </Animated.View>
