@@ -16,7 +16,7 @@
 
 import React, { Component } from 'react';
 import { Text, View, StyleSheet, Image, Dimensions } from 'react-native';
-import { createBottomTabNavigator, createAppContainer, createStackNavigator } from 'react-navigation';
+import { createAppContainer, createStackNavigator } from 'react-navigation';
 import Button from 'react-native-button';
 import ExploreScreen from './ExploreScreen.js';
 
@@ -68,7 +68,7 @@ class HomeScreen extends Component<Props> {
         <Button
           style={{ fontSize: 26, color: 'white' }}
           containerStyle={{ padding: 10, height: 70, width: SCREEN_WIDTH - 40, overflow: 'hidden', borderRadius: 8, backgroundColor: '#1E90FF', justifyContent: 'center', alignItems: 'center', }}
-          onPress={() => this._handlePress()} 
+          onPress={() => this.props.navigation.navigate('ExploreScreen') } 
         >
           Let's start !
         </Button>
@@ -78,20 +78,19 @@ class HomeScreen extends Component<Props> {
   }
 }
 
-const AppNavigator = createBottomTabNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-   header: null
-  }
-  },
-  Explore: {
-    screen: ExploreScreen,
+const HomeScreenNavigator = createStackNavigator({
+    Home: {
+      screen: HomeScreen,
       navigationOptions: {
-      header: null
+    header: null
+    }
+    },
+    ExploreScreen: {
+      screen: ExploreScreen,
+        navigationOptions: {
+    header: null
+    }
   }
-  }
-});
+  });
 
-
-export default createAppContainer(AppNavigator);
+export default createAppContainer(HomeScreenNavigator);

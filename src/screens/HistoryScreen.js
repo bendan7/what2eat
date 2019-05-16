@@ -1,3 +1,4 @@
+/* eslint-disable no-else-return */
 /* eslint-disable prefer-template */
 /* eslint-disable no-undef */
 /* eslint-disable max-len */
@@ -24,39 +25,24 @@ import {
 const SERVER_IP = '10.100.102.2';
 const PORT_NUM = '5005';
 type Props = {};
-let data = [{
-
-  id: 1234,
-  title: 'loading...',
-  shortdesc: 'loading...',
-  preptime: 'loading...',
-  level: 'loading...',
-  imageurl: 'loading...'
-},
-];
+let data = [];
 
 export default class ScrollviewComp extends Component<Props> {
 
-
   componentWillMount() {
-      fetch(`http://${SERVER_IP}:${PORT_NUM}/get-preview-info`, {
-         method: 'GET'
-      })
-      .then((response) => response.json())
-      .then((responseJson) => {
-        data = responseJson.recPreviewInfo;
-        console.log(data);
-        this.forceUpdate();
-      })
-      .catch((error) => {
-         console.error(error.message + ' ----error:get-preview-info');
-      });
+    //Todo: read saved data from local storge
   }
 
   renderRecipes() {
+    if (data.length === 0) {
+      return (
+          <Text style={{ fontSize: 28, textAlign: 'center' }}>No History...</Text>
+      );
+    }
     return data.map((item) => {
       return (
         <View style={styles.container} key={item.id}>
+          <Text>History Page</Text>
           <Image
           style={styles.img}
           source={{ uri: String(item.imageurl) }}
@@ -70,12 +56,21 @@ export default class ScrollviewComp extends Component<Props> {
   }
 
   render() {
-    return (
-      <ScrollView horizontal={true}>
-        {this.renderRecipes()}
-      </ScrollView>
-    );
+    if (data.length !== 0) {
+      return (
+        <ScrollView horizontal={true}>
+          {this.renderRecipes()}
+        </ScrollView>
+        );
+      } else {
+      return (
+        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: 15, }}>
+          {this.renderRecipes()}
+        </View>
+        );
+      }
   }
+
 }
 
 const styles = StyleSheet.create({
@@ -93,4 +88,25 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 50,
   },
 
+});
+
+const styles1 = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F5FCFF',
+    paddingHorizontal: 15,
+  },
+  welcome: {
+    fontSize: 28,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    fontSize: 20,
+    color: '#333333',
+    marginBottom: 5,
+  },
 });
