@@ -21,18 +21,19 @@ import RecentlyRecipesScreen from './RecentlyRecipesScreen.js';
 import HomeScreen from './HomeScreen.js';
 
 const AppNavigator = createBottomTabNavigator({
-  Home: {
-    screen: HomeScreen,
-    navigationOptions: {
-   header: null
-  }
-  },
-  'recently recipes': {
-    screen: RecentlyRecipesScreen,
-      navigationOptions: {
-      header: null
-  }
-  }
-});
+      Home: {
+          screen: HomeScreen,
+          navigationOptions: {
+        header: null
+        }
+      },
+      'recently recipes': {
+          screen: RecentlyRecipesScreen,
+            navigationOptions: {
+            header: null
+        }
+      }
+    },
+  );
 
 export default createAppContainer(AppNavigator);

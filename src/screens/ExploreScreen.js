@@ -134,7 +134,7 @@ class ExploreScreen extends React.Component<Props> {
       algoId: this.state.algoId,
       }),
       }).then((response) => response.json())
-    .then((responseJson) => {
+      .then((responseJson) => {
       console.log(responseJson);
       // push the next att that need to be ask into att
       //Users.push({ id: Users.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });

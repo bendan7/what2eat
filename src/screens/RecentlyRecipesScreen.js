@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 /* eslint-disable no-else-return */
 /* eslint-disable prefer-template */
 /* eslint-disable no-undef */
@@ -32,12 +33,10 @@ export default class ScrollviewComp extends Component<Props> {
 
   constructor(Props) {
     super(Props);
-
   }
   
   componentWillMount() {
     this.props.navigation.addListener('didFocus', () => {
-      console.log('@@@@@@@@@@@@@@@@@@@');
       const { navigation } = this.props;
       const algoId = navigation.getParam('algoId', 'NO-ID');
       if (algoId !== 'NO-ID') { 
@@ -49,7 +48,7 @@ export default class ScrollviewComp extends Component<Props> {
 
 
   async getPreviewInfo(algoId) {
-    console.log('getPreviewInfo()');
+    console.log('RUN getNextAttToAsk()');
     await fetch(`http://${SERVER_IP}:${PORT_NUM}/get-preview-info`, {
       method: 'POST',
       body: JSON.stringify({
@@ -57,12 +56,11 @@ export default class ScrollviewComp extends Component<Props> {
       }),
       }).then((response) => response.json())
       .then((responseJson) => {
-      console.log(responseJson);
-      data = data.concat(responseJson.recPreviewInfo);
-      this.forceUpdate();
+        data = data.concat(responseJson.recPreviewInfo);
+        this.forceUpdate();
     })
     .catch((error) => {
-        console.error(error.message + ' ----error:get-preview-info');
+        console.error(error.message + 'Error:get-preview-info');
     });
   }
 
@@ -81,7 +79,7 @@ export default class ScrollviewComp extends Component<Props> {
           />
           <Text style={{ padding: 5, fontSize: 24, fontWeight: 'bold' }}>{item.title}</Text>
           <Text style={{ paddingHorizontal: 10, paddingBottom: 50, fontSize: 20, fontStyle: 'italic' }}>{String(item.desc).substr(0, 100)}</Text>
-          <Button style={{ height: 250, }} title="Full Recipe" color="#505160" onPress={() => { Linking.openURL('https://google.com'); }} />
+          <Button style={{ height: 250, }} title="Full Recipe" color="#505160" onPress={() => { Linking.openURL(item.recipeURL); }} />
         </View>
       );
     });
