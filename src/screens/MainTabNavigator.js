@@ -17,6 +17,7 @@
 
 import React, { Component } from 'react';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import RecentlyRecipesScreen from './RecentlyRecipesScreen.js';
 import HomeScreen from './HomeScreen.js';
 
@@ -34,6 +35,26 @@ const AppNavigator = createBottomTabNavigator({
         }
       }
     },
+    {
+    defaultNavigationOptions: ({ navigation }) => ({
+      tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        const { routeName } = navigation.state;
+        const IconComponent = Ionicons;
+        let iconName;
+        if (routeName === 'Home') {
+          iconName = 'ios-planet';
+        } else if (routeName === 'recently recipes') {
+          iconName = 'md-restaurant';
+        }
+        // You can return any component that you like here!
+        return <IconComponent name={iconName} size={40} color={tintColor} />;
+      },
+    }),
+    tabBarOptions: {
+      activeTintColor: 'tomato',
+      inactiveTintColor: 'gray',
+    },
+  }
   );
 
 export default createAppContainer(AppNavigator);
