@@ -64,7 +64,7 @@ class HomeScreen extends Component<Props> {
         <Button
           style={{ fontSize: 26, color: 'white' }}
           containerStyle={{ padding: 10, height: 70, width: SCREEN_WIDTH - 40, overflow: 'hidden', borderRadius: 8, backgroundColor: '#1E90FF', justifyContent: 'center', alignItems: 'center', }}
-          onPress={() => this.props.navigation.navigate('ExploreScreen')} 
+          onPress={() => this.props.navigation.push('ExploreScreen')} 
         >
           Let's start !
         </Button>

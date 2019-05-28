@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable max-len */
 /* eslint-disable arrow-body-style */
@@ -16,7 +17,7 @@
 
 import React, { Component } from 'react';
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation';
-import HistoryScreen from './HistoryScreen.js';
+import RecentlyRecipesScreen from './RecentlyRecipesScreen.js';
 import HomeScreen from './HomeScreen.js';
 
 const AppNavigator = createBottomTabNavigator({
@@ -26,8 +27,8 @@ const AppNavigator = createBottomTabNavigator({
    header: null
   }
   },
-  History: {
-    screen: HistoryScreen,
+  'recently recipes': {
+    screen: RecentlyRecipesScreen,
       navigationOptions: {
       header: null
   }

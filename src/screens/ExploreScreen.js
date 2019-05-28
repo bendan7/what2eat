@@ -22,17 +22,18 @@ import { Text, View, Dimensions, Animated, PanResponder, ImageBackground } from 
 import { createStackNavigator, createAppContainer, NavigationEvents } from 'react-navigation';
 
 import ScrollviewComp from './ScrollviewComp';
+//import HomeScreen from './HomeScreen';
 
 
 const SERVER_IP = '10.100.102.2';
-const PORT_NUM = '5005';
+const PORT_NUM = '5000';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
 const Att = [];
 let TotalNumOfRecipes = 0;
 
-class ExploreScreen extends React.Component {
+class ExploreScreen extends React.Component<Props> {
 
   constructor() {
     super();
@@ -77,10 +78,18 @@ class ExploreScreen extends React.Component {
       outputRange: [1, 0.8, 1],
       extrapolate: 'clamp',
     });
-    this.getNextAttToAsk();
   }
 
   componentWillMount() {
+        this.props.navigation.addListener('willFocus', () => {
+        //this.restart();
+        console.log('restart()');
+        while (Att.length > 0) {
+          Att.pop();
+        }
+        this.initConection();
+      });
+
     this.PanResponder = PanResponder.create({
 
       // eslint-disable-next-line no-unused-vars
@@ -116,17 +125,21 @@ class ExploreScreen extends React.Component {
       },
     });
   }
-
+  
   async getNextAttToAsk() {
+    console.log('RUN getNextAttToAsk()');
     await fetch(`http://${SERVER_IP}:${PORT_NUM}/get-next-att`, {
-        method: 'GET'
-    })
-    .then((response) => response.json())
+      method: 'POST',
+      body: JSON.stringify({
+      algoId: this.state.algoId,
+      }),
+      }).then((response) => response.json())
     .then((responseJson) => {
+      console.log(responseJson);
       // push the next att that need to be ask into att
       //Users.push({ id: Users.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
       Att.push({ id: Att.length, name: responseJson.nextAtt, uri: { uri: String(responseJson.nextAttImage) } });
-      
+
       // in the first request this section save the total number of recipes
       if (Att.length === 1) {
             TotalNumOfRecipes = responseJson.numOfRelevantDishes;
@@ -136,11 +149,29 @@ class ExploreScreen extends React.Component {
       });
     })
     .catch((error) => {
-        console.error(error.message + ' ----error:getNextAttToAsk');
+        console.error(error.message + ' ::error:getNextAttToAsk');
+    });
+  }
+
+  async initConection() {
+    await fetch(`http://${SERVER_IP}:${PORT_NUM}/run-algo`, {
+        method: 'GET'
+    })
+    .then((response) => response.json())
+    .then((responseJson) => {
+      // updating the conaction id
+      this.setState({
+        algoId: Number(responseJson.algoId)
+      }); 
+      this.getNextAttToAsk();
+    })
+    .catch((error) => {
+        console.error(error.message + ' ::error:getNextAttToAsk');
     });
   }
 
   async sendYesOrNo(ans) {
+      console.log('sendYesOrNo(ans)');
       await fetch(`http://${SERVER_IP}:${PORT_NUM}/send-yes-or-no`, {
       method: 'POST',
       headers: {
@@ -148,13 +179,17 @@ class ExploreScreen extends React.Component {
       'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-      res: `${ans}`,
+      ans: `${ans}`,
+      name: `${Att[Att.length - 1].name}`,
+      algoId: this.state.algoId
       }),
       }).then((response) => response.json())
       .then((responseJson) => {
-        if (responseJson.AreWeFinsih === 1) {
+        // the case that: num of recsipes<= threshold
+        if (responseJson.areWeDone === true) {
           this.setState({ numOfRelevantDishes: responseJson.numOfRelevantDishes });
-          this.props.navigation.navigate('History');
+          this.props.navigation.goBack(null); //remove the 'explor layer'
+          this.props.navigation.navigate('recently recipes', { algoId: this.state.algoId }); // navigate to 'recently recipes screen'
         } else {
         this.getNextAttToAsk();
         }
@@ -162,6 +197,15 @@ class ExploreScreen extends React.Component {
       .catch((error) => {
          console.error(error.message + ' ---error:sendYesOrNo');
       });   
+  }
+
+  async restart() {
+    await fetch(`http://${SERVER_IP}:${PORT_NUM}/restart-algo`, {
+        method: 'GET'
+    })
+    .catch((error) => {
+        console.error(error.message + ' ::error:/restart-algo');
+    });
   }
 
   renderAtt() {
@@ -211,10 +255,10 @@ class ExploreScreen extends React.Component {
         <View style={{ flex: 1 }}>
           {this.renderAtt()}
           <NavigationEvents
-            onWillFocus={() => console.log('will focus')}
-            onDidFocus={() => console.log('did focus')}
-            onWillBlur={() => console.log('will blur')}
-            onDidBlur={() => console.log('did blur')}
+            //onWillFocus={() => console.log('will focus')}
+            //onDidFocus={() => console.log('did focus')}
+            //onWillBlur={() => { console.log('will blur'); }}
+            //onDidBlur={() => console.log('did blur')}
           />
         </View>
     );

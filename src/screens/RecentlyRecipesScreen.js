@@ -23,14 +23,47 @@ import {
 } from 'react-native';
 
 const SERVER_IP = '10.100.102.2';
-const PORT_NUM = '5005';
+const PORT_NUM = '5000';
 type Props = {};
 let data = [];
 
+
 export default class ScrollviewComp extends Component<Props> {
 
+  constructor(Props) {
+    super(Props);
+
+  }
+  
   componentWillMount() {
-    //Todo: read saved data from local storge
+    this.props.navigation.addListener('didFocus', () => {
+      console.log('@@@@@@@@@@@@@@@@@@@');
+      const { navigation } = this.props;
+      const algoId = navigation.getParam('algoId', 'NO-ID');
+      if (algoId !== 'NO-ID') { 
+        this.getPreviewInfo(algoId);
+        this.props.navigation.setParams({ algoId: 'NO-ID' });     
+      }
+    });
+  }
+
+
+  async getPreviewInfo(algoId) {
+    console.log('getPreviewInfo()');
+    await fetch(`http://${SERVER_IP}:${PORT_NUM}/get-preview-info`, {
+      method: 'POST',
+      body: JSON.stringify({
+      algoId: algoId,
+      }),
+      }).then((response) => response.json())
+      .then((responseJson) => {
+      console.log(responseJson);
+      data = data.concat(responseJson.recPreviewInfo);
+      this.forceUpdate();
+    })
+    .catch((error) => {
+        console.error(error.message + ' ----error:get-preview-info');
+    });
   }
 
   renderRecipes() {
@@ -42,7 +75,6 @@ export default class ScrollviewComp extends Component<Props> {
     return data.map((item) => {
       return (
         <View style={styles.container} key={item.id}>
-          <Text>History Page</Text>
           <Image
           style={styles.img}
           source={{ uri: String(item.imageurl) }}
@@ -88,25 +120,4 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 50,
   },
 
-});
-
-const styles1 = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-    paddingHorizontal: 15,
-  },
-  welcome: {
-    fontSize: 28,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    fontSize: 20,
-    color: '#333333',
-    marginBottom: 5,
-  },
 });
