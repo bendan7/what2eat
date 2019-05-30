@@ -19,14 +19,11 @@
 
 import React from 'react';
 import { Text, View, Dimensions, Animated, PanResponder, ImageBackground } from 'react-native';
-import { createStackNavigator, createAppContainer, NavigationEvents } from 'react-navigation';
+import { createStackNavigator, createAppContainer } from 'react-navigation';
 
 import ScrollviewComp from './ScrollviewComp';
 //import HomeScreen from './HomeScreen';
 
-
-const SERVER_IP = '10.100.102.2';
-const PORT_NUM = '5000';
 
 const SCREEN_HEIGHT = Dimensions.get('window').height;
 const SCREEN_WIDTH = Dimensions.get('window').width;
@@ -128,7 +125,7 @@ class ExploreScreen extends React.Component<Props> {
   
   async getNextAttToAsk() {
     console.log('RUN getNextAttToAsk()');
-    await fetch(`http://${SERVER_IP}:${PORT_NUM}/get-next-att`, {
+    await fetch(`http://${global.SERVER_IP}:${global.PORT_NUM}/get-next-att`, {
       method: 'POST',
       body: JSON.stringify({
       algoId: this.state.algoId,
@@ -154,7 +151,7 @@ class ExploreScreen extends React.Component<Props> {
   }
 
   async initConection() {
-    await fetch(`http://${SERVER_IP}:${PORT_NUM}/run-algo`, {
+    await fetch(`http://${global.SERVER_IP}:${global.PORT_NUM}/run-algo`, {
         method: 'GET'
     })
     .then((response) => response.json())
@@ -172,7 +169,7 @@ class ExploreScreen extends React.Component<Props> {
 
   async sendYesOrNo(ans) {
       console.log('sendYesOrNo(ans)');
-      await fetch(`http://${SERVER_IP}:${PORT_NUM}/send-yes-or-no`, {
+      await fetch(`http://${global.SERVER_IP}:${global.PORT_NUM}/send-yes-or-no`, {
       method: 'POST',
       headers: {
       Accept: 'application/json',
@@ -200,7 +197,7 @@ class ExploreScreen extends React.Component<Props> {
   }
 
   async restart() {
-    await fetch(`http://${SERVER_IP}:${PORT_NUM}/restart-algo`, {
+    await fetch(`http://${global.SERVER_IP}:${global.PORT_NUM}/restart-algo`, {
         method: 'GET'
     })
     .catch((error) => {
@@ -254,12 +251,6 @@ class ExploreScreen extends React.Component<Props> {
     return (
         <View style={{ flex: 1 }}>
           {this.renderAtt()}
-          <NavigationEvents
-            //onWillFocus={() => console.log('will focus')}
-            //onDidFocus={() => console.log('did focus')}
-            //onWillBlur={() => { console.log('will blur'); }}
-            //onDidBlur={() => console.log('did blur')}
-          />
         </View>
     );
   }

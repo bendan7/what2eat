@@ -23,17 +23,12 @@ import {
   StyleSheet, Text, View, ScrollView, Image, Button, Linking
 } from 'react-native';
 
-const SERVER_IP = '10.100.102.2';
-const PORT_NUM = '5000';
 type Props = {};
 let data = [];
 
 
 export default class ScrollviewComp extends Component<Props> {
 
-  constructor(Props) {
-    super(Props);
-  }
   
   componentWillMount() {
     this.props.navigation.addListener('didFocus', () => {
@@ -49,7 +44,7 @@ export default class ScrollviewComp extends Component<Props> {
 
   async getPreviewInfo(algoId) {
     console.log('RUN getNextAttToAsk()');
-    await fetch(`http://${SERVER_IP}:${PORT_NUM}/get-preview-info`, {
+    await fetch(`http://${global.SERVER_IP}:${global.PORT_NUM}/get-preview-info`, {
       method: 'POST',
       body: JSON.stringify({
       algoId: algoId,
