@@ -35,9 +35,9 @@ class ExploreScreen extends React.Component<Props> {
   constructor() {
     super();
     this.position = new Animated.ValueXY();
-
     this.state = {
       currentIndex: 0,
+      HitTheThreshold: false,
     };
 
     this.rotate = this.position.x.interpolate({
@@ -83,15 +83,20 @@ class ExploreScreen extends React.Component<Props> {
         while (Att.length > 0) {
           Att.pop();
         }
-        this.state = {
+        this.setState({
           currentIndex: 0,
-        };
+          HitTheThreshold: false,
+        });
         this.initConection();
       });
 
       this.props.navigation.addListener('didBlur', () => {
         console.log('didBlur');
-        this.delAlgoObj();
+        
+        // this run if we leave the explor screen without finish
+        if (this.state.HitTheThreshold === false) {
+          this.delAlgoObj();
+        }
       });
 
     this.PanResponder = PanResponder.create({
@@ -168,6 +173,8 @@ class ExploreScreen extends React.Component<Props> {
       this.setState({
         algoId: Number(responseJson.algoId)
       }); 
+      
+      
       this.getNextAttToAsk();
     })
     .catch((error) => {
@@ -190,10 +197,12 @@ class ExploreScreen extends React.Component<Props> {
       }),
       }).then((response) => response.json())
       .then((responseJson) => {
+        
         // the case that: num of recsipes<= threshold
         if (responseJson.areWeDone === true) {
-          this.setState({ numOfRelevantDishes: responseJson.numOfRelevantDishes });
+          this.setState({ HitTheThreshold: true });
           this.props.navigation.goBack(null); //remove the 'explor layer'
+          console.log('!!!!!!!!!!!!!!!!1'+this.state.algoId );
           this.props.navigation.navigate('recently recipes', { algoId: this.state.algoId }); // navigate to 'recently recipes screen'
         } else {
         this.getNextAttToAsk();

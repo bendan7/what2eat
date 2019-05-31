@@ -35,6 +35,7 @@ export default class ScrollviewComp extends Component<Props> {
       const { navigation } = this.props;
       const algoId = navigation.getParam('algoId', 'NO-ID');
       if (algoId !== 'NO-ID') { 
+        console.log(algoId);
         this.getPreviewInfo(algoId);
         this.props.navigation.setParams({ algoId: 'NO-ID' });     
       }
@@ -43,7 +44,7 @@ export default class ScrollviewComp extends Component<Props> {
 
 
   async getPreviewInfo(algoId) {
-    console.log('RUN getNextAttToAsk()');
+    console.log('RUN ggetPreviewInfo()' + algoId);
     await fetch(`http://${global.SERVER_IP}:${global.PORT_NUM}/get-preview-info`, {
       method: 'POST',
       body: JSON.stringify({
