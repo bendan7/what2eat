@@ -42,12 +42,12 @@ const AppNavigator = createBottomTabNavigator({
         const IconComponent = Ionicons;
         let iconName;
         if (routeName === 'Home') {
-          iconName = 'ios-planet';
+          iconName = 'ios-compass';
         } else if (routeName === 'recently recipes') {
           iconName = 'md-restaurant';
         }
         // You can return any component that you like here!
-        return <IconComponent name={iconName} size={40} color={tintColor} />;
+        return <IconComponent name={iconName} size={35} color={tintColor} />;
       },
     }),
     tabBarOptions: {

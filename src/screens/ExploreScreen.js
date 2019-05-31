@@ -78,13 +78,20 @@ class ExploreScreen extends React.Component<Props> {
   }
 
   componentWillMount() {
-        this.props.navigation.addListener('willFocus', () => {
-        //this.restart();
-        console.log('restart()');
+      this.props.navigation.addListener('willFocus', () => {
+        console.log('willFocus');
         while (Att.length > 0) {
           Att.pop();
         }
+        this.state = {
+          currentIndex: 0,
+        };
         this.initConection();
+      });
+
+      this.props.navigation.addListener('didBlur', () => {
+        console.log('didBlur');
+        this.delAlgoObj();
       });
 
     this.PanResponder = PanResponder.create({
@@ -157,13 +164,14 @@ class ExploreScreen extends React.Component<Props> {
     .then((response) => response.json())
     .then((responseJson) => {
       // updating the conaction id
+      console.log(responseJson);
       this.setState({
         algoId: Number(responseJson.algoId)
       }); 
       this.getNextAttToAsk();
     })
     .catch((error) => {
-        console.error(error.message + ' ::error:getNextAttToAsk');
+        console.error(error.message + ' ::error:initConection');
     });
   }
 
@@ -196,12 +204,19 @@ class ExploreScreen extends React.Component<Props> {
       });   
   }
 
-  async restart() {
-    await fetch(`http://${global.SERVER_IP}:${global.PORT_NUM}/restart-algo`, {
-        method: 'GET'
+  async delAlgoObj() {
+    console.log('RUN delAlgoObj()');
+    await fetch(`http://${global.SERVER_IP}:${global.PORT_NUM}/del-algo`, {
+      method: 'POST',
+      body: JSON.stringify({
+      algoId: this.state.algoId,
+      }),
+      }).then((response) => response)
+      .then((responseJson) => {
+      console.log('Algo delete');
     })
     .catch((error) => {
-        console.error(error.message + ' ::error:/restart-algo');
+        console.error(error.message + ' ::error:getNextAttToAsk');
     });
   }
 

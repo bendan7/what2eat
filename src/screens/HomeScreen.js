@@ -58,15 +58,15 @@ class HomeScreen extends Component<Props> {
         <View style={{ padding: 20 }}>
           
           <Text style={{ textAlign: 'center' }}>instructions:</Text>
-          <Text style={styles.instructions}>Swip Right -> I have</Text>
-          <Text style={styles.instructions}>Swip Left {'<-'} I don't have</Text>
+          <Text style={styles.instructions}>Swipe Right -> I have</Text>
+          <Text style={styles.instructions}>Swipe Left {'<-'} I don't have</Text>
         </View>
         <Button
           style={{ fontSize: 26, color: 'white' }}
           containerStyle={{ padding: 10, height: 70, width: SCREEN_WIDTH - 40, overflow: 'hidden', borderRadius: 8, backgroundColor: '#1E90FF', justifyContent: 'center', alignItems: 'center', }}
           onPress={() => this.props.navigation.push('ExploreScreen')} 
         >
-          Let's start !
+          Let's Start!
         </Button>
       </View>
 
