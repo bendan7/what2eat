@@ -46,6 +46,11 @@ type Props = {};
 
 class HomeScreen extends Component<Props> {
 
+
+  componentWillMount() {
+
+  }
+
   render() {
     return (
       <View style={styles.container}>

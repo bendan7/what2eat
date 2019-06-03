@@ -21,7 +21,7 @@ import React from 'react';
 import { Text, View, Dimensions, Animated, PanResponder, ImageBackground } from 'react-native';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 
-import ScrollviewComp from './ScrollviewComp';
+import ScrollviewComp from './RecentlyRecipesScreen.js';
 //import HomeScreen from './HomeScreen';
 
 
@@ -94,10 +94,17 @@ class ExploreScreen extends React.Component<Props> {
         console.log('didBlur');
         
         // this run if we leave the explor screen without finish
+        // if 'wefinish == true' so the method getpreview will make a call to the delete action 
         if (this.state.HitTheThreshold === false) {
           this.delAlgoObj();
         }
       });
+
+        
+      this.props.navigation.addListener('willBlur', () => {
+        console.log('willBlur');
+        });
+      
 
     this.PanResponder = PanResponder.create({
 
@@ -197,12 +204,10 @@ class ExploreScreen extends React.Component<Props> {
       }),
       }).then((response) => response.json())
       .then((responseJson) => {
-        
         // the case that: num of recsipes<= threshold
         if (responseJson.areWeDone === true) {
           this.setState({ HitTheThreshold: true });
           this.props.navigation.goBack(null); //remove the 'explor layer'
-          console.log('!!!!!!!!!!!!!!!!1'+this.state.algoId );
           this.props.navigation.navigate('recently recipes', { algoId: this.state.algoId }); // navigate to 'recently recipes screen'
         } else {
         this.getNextAttToAsk();
@@ -221,7 +226,7 @@ class ExploreScreen extends React.Component<Props> {
       algoId: this.state.algoId,
       }),
       }).then((response) => response)
-      .then((responseJson) => {
+      .then(() => {
       console.log('Algo delete');
     })
     .catch((error) => {
@@ -278,9 +283,10 @@ class ExploreScreen extends React.Component<Props> {
         </View>
     );
   }
+
 }
 
-const AppNavigator = createStackNavigator({
+const StackNavigator = createStackNavigator({
   Explore: {
     screen: ExploreScreen,
     navigationOptions: {
@@ -295,4 +301,4 @@ const AppNavigator = createStackNavigator({
   }
 });
 
-export default createAppContainer(AppNavigator);
+export default createAppContainer(StackNavigator);

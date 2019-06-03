@@ -1,3 +1,4 @@
+/* eslint-disable no-extend-native */
 /* eslint-disable object-shorthand */
 /* eslint-disable no-else-return */
 /* eslint-disable prefer-template */
@@ -23,13 +24,34 @@ import {
   StyleSheet, Text, View, ScrollView, Image, Button, Linking
 } from 'react-native';
 
+
 type Props = {};
-let data = [];
+const data = [];
 
 
 export default class ScrollviewComp extends Component<Props> {
 
+  constructor() {
+    super();
+    // check if an element exists in array using a comparer function
+    // comparer : function(currentElement)
+    Array.prototype.inArray = function (comparer) { 
+    for (let i = 0; i < this.length; i++) { 
+        if (comparer(this[i])) return true; 
+    }
+    return false; 
+    }; 
+
+    // adds an element to the array if it does not already exist using a comparer 
+    // function
+    Array.prototype.pushIfNotExist = function (element, comparer) { 
+    if (!this.inArray(comparer)) {
+        this.push(element);
+    }
+    }; 
+  }
   
+ 
   componentWillMount() {
     this.props.navigation.addListener('didFocus', () => {
       const { navigation } = this.props;
@@ -52,7 +74,10 @@ export default class ScrollviewComp extends Component<Props> {
       }),
       }).then((response) => response.json())
       .then((responseJson) => {
-        data = data.concat(responseJson.recPreviewInfo);
+        responseJson.recPreviewInfo.forEach(element => {
+          data.pushIfNotExist(element, (e) => { return e.id === element.id; });
+        });
+        //data = data.concat(responseJson.recPreviewInfo);
         this.forceUpdate();
     })
     .catch((error) => {
@@ -75,7 +100,9 @@ export default class ScrollviewComp extends Component<Props> {
           />
           <Text style={{ padding: 5, fontSize: 24, fontWeight: 'bold' }}>{item.title}</Text>
           <Text style={{ paddingHorizontal: 10, paddingBottom: 50, fontSize: 20, fontStyle: 'italic' }}>{String(item.desc).substr(0, 100)}</Text>
-          <Button style={{ height: 250, }} title="Full Recipe" color="#505160" onPress={() => { Linking.openURL(item.recipeURL); }} />
+          <View style={{ flex: 1, justifyContent: 'flex-end', marginBottom: 45 }}>
+            <Button style={{ height: 250, }} title="Full Recipe" color="#505160" onPress={() => { Linking.openURL(item.recipeURL); }} />
+          </View>
         </View>
       );
     });
@@ -103,6 +130,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     margin: 8,
+    
     backgroundColor: '#AEBD38',
     width: 350,
     borderRadius: 50,

@@ -21,11 +21,12 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import RecentlyRecipesScreen from './RecentlyRecipesScreen.js';
 import HomeScreen from './HomeScreen.js';
 
+
 const AppNavigator = createBottomTabNavigator({
       Home: {
           screen: HomeScreen,
           navigationOptions: {
-        header: null
+          header: null
         }
       },
       'recently recipes': {
@@ -54,6 +55,7 @@ const AppNavigator = createBottomTabNavigator({
       activeTintColor: 'tomato',
       inactiveTintColor: 'gray',
     },
+    resetOnBlur: true,  //Reset the state of the nested stacknavigator when switching away from a screen
   }
   );
 
